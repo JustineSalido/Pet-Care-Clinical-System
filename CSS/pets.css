@@ -1,0 +1,262 @@
+/* ---------- Top right: user + Add Pet button ---------- */
+.topbar-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.btn-primary {
+  padding: 14px 24px;
+  background: #0a7cff;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.btn-primary:hover {
+  background: #0865d1;
+}
+
+/* ---------- Pet grid ---------- */
+.pet-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 250px));
+  gap: 28px;
+}
+
+.pet-card,
+.add-card {
+  background: #ffffff;
+  border: 1.5px solid #d8e6f3;
+  border-radius: 44px;
+  min-height: 340px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.pet-card {
+  padding: 26px 18px 22px;
+}
+
+.pet-photo {
+  width: 100%;
+  height: 155px;
+  border-radius: 30px;
+  background: #eaf3ff;
+  color: #0a7cff;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 1.2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin-bottom: 22px;
+}
+
+.pet-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.pet-info {
+  font-size: 13px;
+  font-weight: bold;
+  line-height: 1.4;
+  color: #0b3d6e;
+}
+
+.pet-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 14px;
+}
+
+/* ---------- Add new pet card ---------- */
+.add-card {
+  justify-content: center;
+  gap: 12px;
+  padding: 26px 18px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.add-card:hover {
+  background: #f4f9fe;
+  border-color: #0a7cff;
+}
+
+.add-plus {
+  font-size: 48px;
+  font-weight: bold;
+  line-height: 1;
+  color: #0a7cff;
+  margin-bottom: 18px;
+}
+
+.add-title {
+  font-size: 16px;
+  font-weight: bold;
+  color: #0b3d6e;
+  margin-bottom: 14px;
+}
+
+.add-text {
+  font-size: 11px;
+  color: #6b7f94;
+}
+
+/* ---------- Popups (add, edit, view) ---------- */
+.modal {
+  max-height: 92vh;
+  overflow-y: auto;
+}
+
+.photo-pick {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.photo-preview {
+  width: 96px;
+  height: 80px;
+  border-radius: 18px;
+  background: #eaf3ff;
+  color: #0a7cff;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 1.2;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.photo-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.photo-btn {
+  padding: 10px 16px;
+  background: #ffffff;
+  border: 1.5px solid #0a7cff;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: bold;
+  color: #0a7cff;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.photo-btn:hover {
+  background: #eaf3ff;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.modal-actions .modal-submit {
+  flex: 1;
+}
+
+.btn-danger {
+  padding: 0 18px;
+  background: #ffffff;
+  border: 1.5px solid #d93025;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: bold;
+  color: #d93025;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.btn-danger:hover {
+  background: #fdecea;
+}
+
+.btn-danger[hidden] {
+  display: none;
+}
+
+.view-photo {
+  width: 100%;
+  height: 190px;
+  border-radius: 28px;
+  background: #eaf3ff;
+  color: #0a7cff;
+  font-size: 22px;
+  font-weight: bold;
+  line-height: 1.2;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin-bottom: 18px;
+}
+
+.view-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.view-rows {
+  margin-bottom: 20px;
+}
+
+.view-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid #eaf3ff;
+  font-size: 14px;
+}
+
+.view-row span:first-child {
+  color: #6b7f94;
+}
+
+.view-row span:last-child {
+  font-weight: bold;
+  color: #0b3d6e;
+  text-align: right;
+}
+
+.modal .view-title {
+  margin-bottom: 14px;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 950px) {
+  .topbar-right {
+    align-items: flex-start;
+  }
+  .pet-grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  }
+}

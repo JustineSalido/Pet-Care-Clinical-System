@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | Pet Care Clinic</title>
+  <link rel="stylesheet" href="../CSS/login.css">
+</head>
+<body>
+  <main class="login-wrapper">
+
+    <!-- Left: Login card -->
+    <section class="login-card">
+      <div class="logo">
+        <span class="logo-icon">✢</span>
+        <span class="logo-text">Pet Care Clinic</span>
+      </div>
+
+      <div class="login-content">
+        <h1>Welcome Back!</h1>
+        <p class="subtitle">Login to your account</p>
+
+        <form id="loginForm">
+          <label for="username">Email or Username</label>
+          <input type="text" id="username" placeholder="Enter your email or username" required>
+
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="Enter your password" required>
+
+          <a href="#" class="forgot">Forgot password?</a>
+
+          <button type="submit" class="btn-login">Login</button>
+        </form>
+
+        <p class="register-text">
+          <a href="register.html">Don't have an account? Register</a>
+        </p>
+      </div>
+    </section>
+
+    <!-- Right: the whole box is the image -->
+    <section class="photo-panel">
+      <img src="../IMG/pets.jpg" alt="Dog and cat">
+      <h2>Because<br>they're family</h2>
+    </section>
+
+  </main>
+
+  <script src="../JS/login.js"></script>
+</body>
+</html>

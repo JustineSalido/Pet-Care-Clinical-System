@@ -1,0 +1,271 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f4f9fe;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+}
+
+.login-wrapper {
+  width: 100%;
+  max-width: 1240px;
+  display: grid;
+  grid-template-columns: 0.8fr 1fr;
+  gap: 35px;
+  min-height: 660px;
+}
+
+/* ---------- Left card ---------- */
+.login-card {
+  background: #ffffff;
+  border: 1.5px solid #d8e6f3;
+  border-radius: 110px;
+  padding: 40px 45px;
+  display: flex;
+  flex-direction: column;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #0b3d6e;
+}
+
+.logo-icon {
+  font-size: 20px;
+}
+
+.logo-text {
+  font-size: 19px;
+  font-weight: bold;
+}
+
+.login-content {
+  margin-top: 50px;
+}
+
+.login-content h1 {
+  font-size: 36px;
+  color: #0b3d6e;
+  margin-bottom: 14px;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #6b7f94;
+  margin-bottom: 18px;
+}
+
+/* ---------- Form ---------- */
+form label {
+  display: block;
+  font-size: 13px;
+  font-weight: bold;
+  color: #0b3d6e;
+  margin-bottom: 8px;
+}
+
+form input {
+  width: 100%;
+  height: 54px;
+  padding: 0 16px;
+  border: 1.5px solid #d8e6f3;
+  border-radius: 12px;
+  font-size: 14px;
+  font-family: inherit;
+  color: #0b3d6e;
+  outline: none;
+  margin-bottom: 14px;
+  transition: 0.2s ease;
+}
+
+form input::placeholder {
+  color: #6b7f94;
+}
+
+form input:focus {
+  border-color: #0a7cff;
+  box-shadow: 0 0 0 3px rgba(10, 124, 255, 0.12);
+}
+
+form input.input-error {
+  border-color: #d93025;
+}
+
+/* ---------- Password show/hide (eye icon) ---------- */
+.password-wrap {
+  position: relative;
+  margin-bottom: 14px;
+}
+
+.password-wrap input {
+  margin-bottom: 0;
+  padding-right: 52px;
+}
+
+.toggle-password {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  border-radius: 50%;
+  color: #6b7f94;
+  cursor: pointer;
+  padding: 0;
+  transition: 0.2s ease;
+}
+
+.toggle-password:hover {
+  color: #0a7cff;
+  background: #eaf3ff;
+}
+
+.toggle-password svg {
+  display: block;
+}
+
+/* ---------- Messages ---------- */
+.form-message {
+  font-size: 13px;
+  font-weight: bold;
+  margin-bottom: 14px;
+}
+
+.form-message.error {
+  color: #d93025;
+}
+
+.form-message.success {
+  color: #1a9a4a;
+}
+
+/* ---------- Links and buttons ---------- */
+.forgot {
+  display: block;
+  text-align: right;
+  font-size: 12px;
+  font-weight: bold;
+  color: #0a7cff;
+  text-decoration: none;
+  margin: 4px 0 26px;
+}
+
+.forgot:hover {
+  text-decoration: underline;
+}
+
+.btn-login {
+  width: 100%;
+  height: 52px;
+  background: #0a7cff;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: bold;
+  font-family: inherit;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.btn-login:hover {
+  background: #0865d1;
+}
+
+.register-text {
+  text-align: center;
+  margin-top: 26px;
+}
+
+.register-text a {
+  font-size: 13px;
+  font-weight: bold;
+  color: #0a7cff;
+  text-decoration: none;
+}
+
+.register-text a:hover {
+  text-decoration: underline;
+}
+
+/* ---------- Right panel: the whole box is the image ---------- */
+.photo-panel {
+  position: relative;
+  border-radius: 110px;
+  overflow: hidden;
+  min-height: 660px;
+  background: #eaf3ff;
+}
+
+.photo-panel img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.photo-panel h2 {
+  position: absolute;
+  top: 70px;
+  left: 52px;
+  z-index: 2;
+  font-size: 26px;
+  line-height: 1.3;
+  color: #ffffff;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 950px) {
+  .login-wrapper {
+    grid-template-columns: 1fr;
+  }
+  .login-card {
+    border-radius: 60px;
+  }
+  .photo-panel {
+    border-radius: 60px;
+    min-height: 420px;
+  }
+  .photo-panel h2 {
+    top: 40px;
+    left: 35px;
+  }
+}
+
+@media (max-width: 500px) {
+  body {
+    padding: 15px;
+  }
+  .login-card {
+    border-radius: 35px;
+    padding: 30px 25px;
+  }
+  .login-content h1 {
+    font-size: 30px;
+  }
+  .photo-panel {
+    border-radius: 35px;
+    min-height: 320px;
+  }
+}
