@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const confirmPassword = document.getElementById("confirmPassword");
   const terms = document.getElementById("terms");
 
-  /* ---------- 1. Eye icon sa dalawang password field ---------- */
+  /* ---------- 1. Eye icon sa 2 password field ---------- */
   const eyeOpen = `
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

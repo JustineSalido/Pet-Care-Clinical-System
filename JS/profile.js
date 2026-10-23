@@ -1,4 +1,4 @@
-/* Profile & Settings. Data comes from PHP + database (no localStorage). */
+
 const API = {
   get:      '../PHP/get_profile.php',
   update:   '../PHP/update_profile.php',

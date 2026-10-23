@@ -8,29 +8,35 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   background: #f4f9fe;
   min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 30px;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  overflow-x: hidden;
 }
 
 .register-wrapper {
   width: 100%;
-  max-width: 1240px;
+  max-width: 1050px;
+  min-height: 650px;
+  max-height: 85vh;
   display: grid;
-  grid-template-columns: 0.8fr 1fr;
-  gap: 35px;
-  min-height: 660px;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
 }
 
-/* ---------- Left card ---------- */
 .register-card {
   background: #ffffff;
   border: 1.5px solid #d8e6f3;
-  border-radius: 110px;
-  padding: 40px 45px;
+  border-radius: 40px;
+  padding: 35px 45px;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  overflow-y: auto;
+}
+
+.register-card::-webkit-scrollbar {
+  width: 0px;
 }
 
 .logo {
@@ -38,60 +44,56 @@ body {
   align-items: center;
   gap: 10px;
   color: #0b3d6e;
+  margin-bottom: 12px;
 }
 
-.logo-icon {
-  font-size: 20px;
+.logo-icon { 
+  font-size: 18px; 
 }
 
-.logo-text {
-  font-size: 19px;
-  font-weight: bold;
-}
-
-.register-content {
-  margin-top: 28px;
+.logo-text { 
+  font-size: 16px; 
+  font-weight: bold; 
 }
 
 .register-content h1 {
-  font-size: 34px;
+  font-size: 28px;
   color: #0b3d6e;
-  margin-bottom: 10px;
+  margin-bottom: 4px;
 }
 
 .subtitle {
-  font-size: 14px;
+  font-size: 13px;
   color: #6b7f94;
-  margin-bottom: 16px;
+  margin-bottom: 15px;
 }
 
-/* ---------- Form ---------- */
 form label {
   display: block;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: bold;
   color: #0b3d6e;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 form input[type="text"],
 form input[type="email"],
 form input[type="password"] {
   width: 100%;
-  height: 46px;
-  padding: 0 16px;
+  height: 40px;
+  padding: 0 14px;
   border: 1.5px solid #d8e6f3;
-  border-radius: 12px;
-  font-size: 14px;
+  border-radius: 8px;
+  font-size: 13px;
   font-family: inherit;
   color: #0b3d6e;
   outline: none;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   transition: 0.2s ease;
 }
 
-form input::placeholder {
-  color: #6b7f94;
+form input::placeholder { 
+  color: #6b7f94; 
 }
 
 form input:focus {
@@ -99,26 +101,21 @@ form input:focus {
   box-shadow: 0 0 0 3px rgba(10, 124, 255, 0.12);
 }
 
-form input.input-error {
-  border-color: #d93025;
+.password-wrap { 
+  position: relative; 
 }
 
-/* ---------- Password show/hide (eye icon) ---------- */
-.password-wrap {
-  position: relative;
-}
-
-.password-wrap input {
-  padding-right: 52px;
+.password-wrap input { 
+  padding-right: 45px; 
 }
 
 .toggle-password {
   position: absolute;
-  top: 23px;
+  top: 20px;
   right: 8px;
   transform: translateY(-50%);
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -127,7 +124,6 @@ form input.input-error {
   border-radius: 50%;
   color: #6b7f94;
   cursor: pointer;
-  padding: 0;
   transition: 0.2s ease;
 }
 
@@ -136,88 +132,64 @@ form input.input-error {
   background: #eaf3ff;
 }
 
-.toggle-password svg {
-  display: block;
-}
-
-/* ---------- Terms checkbox ---------- */
 .terms {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin: 4px 0 16px;
+  gap: 8px;
+  margin: 2px 0 15px;
 }
 
 .terms input[type="checkbox"] {
-  width: 17px;
-  height: 17px;
+  width: 16px;
+  height: 16px;
   accent-color: #0a7cff;
   cursor: pointer;
-  flex-shrink: 0;
 }
 
 .terms label {
   margin: 0;
   font-size: 12px;
-  font-weight: normal;
   color: #6b7f94;
+  font-weight: normal;
   cursor: pointer;
 }
 
-/* ---------- Messages ---------- */
-.form-message {
-  font-size: 13px;
-  font-weight: bold;
-  margin-bottom: 12px;
-}
-
-.form-message.error {
-  color: #d93025;
-}
-
-.form-message.success {
-  color: #1a9a4a;
-}
-
-/* ---------- Buttons and links ---------- */
 .btn-register {
   width: 100%;
-  height: 50px;
+  height: 44px;
   background: #0a7cff;
   color: #ffffff;
   font-size: 14px;
   font-weight: bold;
-  font-family: inherit;
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
   cursor: pointer;
   transition: 0.2s ease;
 }
 
-.btn-register:hover {
-  background: #0865d1;
+.btn-register:hover { 
+  background: #0865d1; 
 }
 
-.login-text {
-  text-align: center;
-  margin-top: 20px;
+.login-text { 
+  text-align: center; 
+  margin-top: 15px; 
 }
 
-.login-text a {
-  font-size: 13px;
-  font-weight: bold;
-  color: #0a7cff;
-  text-decoration: none;
+.login-text a { 
+  font-size: 13px; 
+  font-weight: bold; 
+  color: #0a7cff; 
+  text-decoration: none; 
 }
 
-.login-text a:hover {
-  text-decoration: underline;
+.login-text a:hover { 
+  text-decoration: underline; 
 }
 
-/* ---------- Right panel: the whole box is the image ---------- */
 .photo-panel {
   position: relative;
-  border-radius: 110px;
+  border-radius: 40px;
   overflow: hidden;
   background: #eaf3ff;
 }
@@ -229,52 +201,68 @@ form input.input-error {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center;
-  display: block;
 }
 
-.photo-panel h2 {
+.image-overlay {
   position: absolute;
-  top: 70px;
-  left: 52px;
-  z-index: 2;
-  font-size: 26px;
-  line-height: 1.3;
-  color: #ffffff;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 40%);
+  display: flex;
+  flex-direction: column;
 }
 
-/* ---------- Responsive ---------- */
-@media (max-width: 950px) {
+.image-overlay h2 {
+  margin-top: 35px;
+  margin-left: 35px;
+  font-size: 32px;
+  line-height: 1.2;
+  color: #ffffff;
+}
+
+@media (max-width: 900px) {
   .register-wrapper {
     grid-template-columns: 1fr;
+    min-height: auto;
+    max-height: none;
+    gap: 20px;
   }
-  .register-card {
-    border-radius: 60px;
+  
+  .register-card { 
+    padding: 40px; 
+    overflow-y: visible; 
   }
-  .photo-panel {
-    border-radius: 60px;
-    min-height: 420px;
-  }
-  .photo-panel h2 {
-    top: 40px;
-    left: 35px;
+  
+  .photo-panel { 
+    order: -1; 
+    height: 250px; 
   }
 }
 
 @media (max-width: 500px) {
-  body {
-    padding: 15px;
+  body { 
+    padding: 10px; 
   }
-  .register-card {
-    border-radius: 35px;
-    padding: 30px 25px;
+  
+  .register-card { 
+    padding: 30px 20px; 
+    border-radius: 30px; 
   }
-  .register-content h1 {
-    font-size: 28px;
+  
+  .register-content h1 { 
+    font-size: 24px; 
   }
-  .photo-panel {
-    border-radius: 35px;
-    min-height: 320px;
+  
+  .photo-panel { 
+    border-radius: 30px; 
+    height: 200px; 
+  }
+  
+  .image-overlay h2 { 
+    font-size: 24px; 
+    margin-top: 20px; 
+    margin-left: 20px; 
   }
 }

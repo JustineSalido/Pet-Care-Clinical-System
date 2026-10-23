@@ -12,7 +12,6 @@ body {
   min-height: 100vh;
 }
 
-/* ---------- Sidebar ---------- */
 .sidebar {
   width: 240px;
   flex-shrink: 0;
@@ -102,7 +101,6 @@ body {
   background: rgba(255, 255, 255, 0.1);
 }
 
-/* ---------- Main ---------- */
 .main {
   flex: 1;
   min-width: 0;
@@ -132,7 +130,6 @@ body {
   margin-top: 12px;
 }
 
-/* ---------- User area ---------- */
 .user-area {
   display: flex;
   align-items: center;
@@ -259,7 +256,6 @@ body {
   background: #eaf3ff;
 }
 
-/* ---------- Cards ---------- */
 .card {
   background: #ffffff;
   border: 1.5px solid #d8e6f3;
@@ -341,7 +337,6 @@ body {
   min-height: 240px;
 }
 
-/* ---------- Lists ---------- */
 .list {
   display: flex;
   flex-direction: column;
@@ -448,7 +443,6 @@ body {
   color: #6b7f94;
 }
 
-/* ---------- Add pet popup ---------- */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -543,7 +537,6 @@ body {
   cursor: pointer;
 }
 
-/* ---------- Responsive ---------- */
 @media (max-width: 950px) {
   body {
     flex-direction: column;

@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  /* ---------- 1. Logout, dropdown, bell ---------- */
   function logout() {
     window.location.href = "login.html";
   }
@@ -15,6 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
     e.stopPropagation();
     userMenu.classList.toggle("open");
   });
+  
   document.addEventListener("click", () => userMenu.classList.remove("open"));
 
   document.querySelectorAll(".nav a").forEach(link => {
@@ -30,13 +30,11 @@ document.addEventListener("DOMContentLoaded", () => {
     window.location.href = "dashboard.html";
   });
 
-  /* ---------- 2. Sample data (palitan o dagdagan) ---------- */
-  // Mga status: "Completed", "Due", "Ongoing"
   const records = {
     Bella: {
       vaccinations: [
-        { date: "2024-01-10", vaccine: "Rabies",     nextDue: "2025-01-10", status: "Completed" },
-        { date: "2024-02-15", vaccine: "DHPP",       nextDue: "2025-02-15", status: "Completed" },
+        { date: "2024-01-10", vaccine: "Rabies", nextDue: "2025-01-10", status: "Completed" },
+        { date: "2024-02-15", vaccine: "DHPP", nextDue: "2025-02-15", status: "Completed" },
         { date: "2024-03-20", vaccine: "Bordetella", nextDue: "2025-03-20", status: "Completed" }
       ],
       diagnoses: [
@@ -58,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
     Luna: {
       vaccinations: [
         { date: "2024-06-12", vaccine: "Rabies", nextDue: "2025-06-12", status: "Completed" },
-        { date: "2024-07-10", vaccine: "FVRCP",  nextDue: "2025-07-10", status: "Due" }
+        { date: "2024-07-10", vaccine: "FVRCP", nextDue: "2025-07-10", status: "Due" }
       ],
       diagnoses: [
         { date: "2025-03-02", diagnosis: "Mild eye irritation", vet: "Dr. Santos" }
@@ -75,7 +73,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  // Mga hanay ng bawat tab: [pamagat ng column, key, uri]
   const TABS = {
     vaccinations: {
       title: "Vaccination Records",
@@ -97,7 +94,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const HISTORY_COLUMNS = [["Date", "date", "date"], ["Condition", "condition"], ["Outcome", "outcome"]];
 
-  /* ---------- 3. Helpers ---------- */
   function el(tag, className, text) {
     const node = document.createElement(tag);
     if (className) node.className = className;
@@ -166,7 +162,6 @@ document.addEventListener("DOMContentLoaded", () => {
     box.appendChild(table);
   }
 
-  /* ---------- 4. Pet selector, tabs, render ---------- */
   const petSelect = document.getElementById("petSelect");
   const recordsTitle = document.getElementById("recordsTitle");
   const recordsBox = document.getElementById("recordsBox");

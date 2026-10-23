@@ -23,7 +23,6 @@ body {
   min-height: 660px;
 }
 
-/* ---------- Left card ---------- */
 .login-card {
   background: #ffffff;
   border: 1.5px solid #d8e6f3;
@@ -65,7 +64,6 @@ body {
   margin-bottom: 18px;
 }
 
-/* ---------- Form ---------- */
 form label {
   display: block;
   font-size: 13px;
@@ -101,7 +99,6 @@ form input.input-error {
   border-color: #d93025;
 }
 
-/* ---------- Password show/hide (eye icon) ---------- */
 .password-wrap {
   position: relative;
   margin-bottom: 14px;
@@ -140,7 +137,6 @@ form input.input-error {
   display: block;
 }
 
-/* ---------- Messages ---------- */
 .form-message {
   font-size: 13px;
   font-weight: bold;
@@ -155,7 +151,6 @@ form input.input-error {
   color: #1a9a4a;
 }
 
-/* ---------- Links and buttons ---------- */
 .forgot {
   display: block;
   text-align: right;
@@ -204,7 +199,6 @@ form input.input-error {
   text-decoration: underline;
 }
 
-/* ---------- Right panel: the whole box is the image ---------- */
 .photo-panel {
   position: relative;
   border-radius: 110px;
@@ -235,18 +229,20 @@ form input.input-error {
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
 }
 
-/* ---------- Responsive ---------- */
 @media (max-width: 950px) {
   .login-wrapper {
     grid-template-columns: 1fr;
   }
+  
   .login-card {
     border-radius: 60px;
   }
+  
   .photo-panel {
     border-radius: 60px;
     min-height: 420px;
   }
+  
   .photo-panel h2 {
     top: 40px;
     left: 35px;
@@ -257,13 +253,16 @@ form input.input-error {
   body {
     padding: 15px;
   }
+  
   .login-card {
     border-radius: 35px;
     padding: 30px 25px;
   }
+  
   .login-content h1 {
     font-size: 30px;
   }
+  
   .photo-panel {
     border-radius: 35px;
     min-height: 320px;

@@ -1,4 +1,3 @@
-/* ---------- Top right: user + Add Pet button ---------- */
 .topbar-right {
   display: flex;
   flex-direction: column;
@@ -23,7 +22,6 @@
   background: #0865d1;
 }
 
-/* ---------- Pet grid ---------- */
 .pet-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(230px, 250px));
@@ -83,7 +81,6 @@
   padding-top: 14px;
 }
 
-/* ---------- Add new pet card ---------- */
 .add-card {
   justify-content: center;
   gap: 12px;
@@ -118,7 +115,6 @@
   color: #6b7f94;
 }
 
-/* ---------- Popups (add, edit, view) ---------- */
 .modal {
   max-height: 92vh;
   overflow-y: auto;
@@ -251,11 +247,11 @@
   margin-bottom: 14px;
 }
 
-/* ---------- Responsive ---------- */
 @media (max-width: 950px) {
   .topbar-right {
     align-items: flex-start;
   }
+  
   .pet-grid {
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   }

@@ -30,8 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
     window.location.href = "dashboard.html";
   });
 
-  /* ---------- 2. Sample data (palitan o dagdagan) ---------- */
-  // from: "me" (ikaw) o "them" (kausap)
+
   const conversations = [
     {
       id: 1,
@@ -69,8 +68,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   ];
 
-  // Demo lang: awtomatikong sagot para makita ang daloy ng chat.
-  // Alisin ang bahaging ito kapag may totoong sumasagot.
   const DEMO_REPLIES = {
     Veterinarian: [
       "Thanks for letting me know. Is your pet still eating and drinking normally?",

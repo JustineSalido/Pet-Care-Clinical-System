@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 
   /* ---------- Settings ---------- */
-  // Gawing true kung gusto mong kailangan munang mag-login bago makita ang dashboard
   const REQUIRE_LOGIN = false;
 
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
@@ -11,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  /* ---------- 1. Pangalan ng user ---------- */
+  /* ---------- 1. Name ofuser ---------- */
   let displayName = "Justine Salido";
 
   if (currentUser) {
@@ -34,7 +33,6 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("userAvatar").textContent = initials;
 
   /* ---------- 2. Sidebar links ---------- */
-  // Hinaharang lang ang mga link na "#" (wala pang page). Ang may totoong page ay mag-navigate.
   document.querySelectorAll(".nav a").forEach(link => {
     link.addEventListener("click", (e) => {
       if (link.getAttribute("href") === "#") {

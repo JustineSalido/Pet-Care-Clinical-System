@@ -23,7 +23,6 @@ body {
   padding: 40px 40px 50px;
 }
 
-/* ---------- Navbar ---------- */
 .navbar {
   display: flex;
   align-items: center;
@@ -67,7 +66,6 @@ body {
   gap: 10px;
 }
 
-/* ---------- Buttons ---------- */
 .btn {
   display: inline-block;
   text-decoration: none;
@@ -100,7 +98,6 @@ body {
   background: #eaf3ff;
 }
 
-/* ---------- Hero ---------- */
 .hero {
   display: grid;
   grid-template-columns: 1.1fr 1fr 1fr;
@@ -128,7 +125,6 @@ body {
   gap: 15px;
 }
 
-/* ---------- Photo Areas ---------- */
 .photo-box {
   height: 355px;
   background: #eaf3ff;
@@ -160,7 +156,6 @@ body {
   display: block;
 }
 
-/* ---------- Features ---------- */
 .features {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -197,7 +192,6 @@ body {
   color: #6b7f94;
 }
 
-/* ---------- Feature card animation ---------- */
 .feature-card.hidden {
   opacity: 0;
   transform: translateY(25px);
@@ -209,7 +203,6 @@ body {
   transform: translateY(0);
 }
 
-/* ---------- Booking popup ---------- */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -287,20 +280,23 @@ body {
   font-weight: bold;
 }
 
-/* ---------- Responsive ---------- */
 @media (max-width: 1100px) {
   .page {
     border-radius: 60px;
   }
+  
   .hero {
     grid-template-columns: 1fr 1fr;
   }
+  
   .hero-text {
     grid-column: 1 / -1;
   }
+  
   .hero-text h1 {
     margin-bottom: 25px;
   }
+  
   .features {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -311,17 +307,21 @@ body {
     border-radius: 30px;
     padding: 25px 20px;
   }
+  
   .navbar {
     flex-direction: column;
     gap: 15px;
   }
+  
   .hero {
     grid-template-columns: 1fr;
     gap: 25px;
   }
+  
   .hero-text h1 {
     font-size: 34px;
   }
+  
   .features {
     grid-template-columns: 1fr;
   }

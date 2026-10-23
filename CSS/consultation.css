@@ -1,4 +1,3 @@
-/* ---------- Layout ---------- */
 .consult-layout {
   display: grid;
   grid-template-columns: 308px minmax(0, 1fr);
@@ -15,7 +14,6 @@
   min-height: 0;
 }
 
-/* ---------- Conversations ---------- */
 .convo-panel {
   border-radius: 60px;
   padding: 30px 22px 24px;
@@ -89,7 +87,6 @@
   justify-content: center;
 }
 
-/* ---------- Chat ---------- */
 .chat-panel {
   border-radius: 80px;
   padding: 30px 30px 28px;
@@ -163,7 +160,6 @@
   text-align: center;
 }
 
-/* ---------- Message box ---------- */
 .chat-form {
   display: flex;
   gap: 10px;
@@ -211,30 +207,34 @@
   background: #0865d1;
 }
 
-/* ---------- Responsive ---------- */
 @media (max-width: 950px) {
   .consult-layout {
     grid-template-columns: 1fr;
     height: auto;
   }
+  
   .convo-panel {
     border-radius: 40px;
     padding: 24px 20px;
   }
+  
   .convo-list {
     flex-direction: row;
     overflow-x: auto;
     overflow-y: hidden;
   }
+  
   .convo {
     min-width: 170px;
     width: auto;
   }
+  
   .chat-panel {
     height: 560px;
     border-radius: 40px;
     padding: 26px 22px 22px;
   }
+  
   .msg {
     max-width: 80%;
   }
@@ -244,6 +244,7 @@
   .chat-panel {
     border-radius: 30px;
   }
+  
   .chat-form button {
     padding: 0 18px;
   }

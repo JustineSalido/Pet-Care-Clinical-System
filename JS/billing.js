@@ -30,7 +30,6 @@ document.addEventListener("DOMContentLoaded", () => {
     window.location.href = "dashboard.html";
   });
 
-  /* ---------- 2. Sample data (palitan o dagdagan) ---------- */
   // status: "Paid" o "Pending"
   const invoices = [
     { date: "2025-05-15", description: "General Checkup (Bella)", amount: 1000, status: "Pending" },
@@ -41,7 +40,6 @@ document.addEventListener("DOMContentLoaded", () => {
     { date: "2024-12-05", description: "Dental Cleaning (Luna)",  amount: 1500, status: "Paid" }
   ];
 
-  // Ilan lang ang ipapakita bago pindutin ang View All
   const PREVIEW_COUNT = 4;
 
   /* ---------- 3. Helpers ---------- */
@@ -71,7 +69,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const viewAllBtn = document.getElementById("viewAllBtn");
   let showAll = false;
 
-  // Pinakabago ang nasa taas
   const sorted = invoices.slice().sort((a, b) => b.date.localeCompare(a.date));
 
   function render() {
@@ -114,7 +111,6 @@ document.addEventListener("DOMContentLoaded", () => {
     table.appendChild(tbody);
     box.appendChild(table);
 
-    // Itago ang button kung wala nang dagdag na ipapakita
     viewAllBtn.hidden = sorted.length <= PREVIEW_COUNT;
     viewAllBtn.textContent = showAll ? "Show Less" : "View All";
   }

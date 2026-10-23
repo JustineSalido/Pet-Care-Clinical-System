@@ -117,7 +117,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       card.append(pet, when);
 
-      // Actions (para sa upcoming lang)
       if (activeTab === "upcoming") {
         const actions = el("div", "appt-actions");
 
@@ -156,8 +155,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   renderList();
 
-  /* ---------- 5. Reschedule popup ---------- */
-  // 9:00 AM to 4:30 PM, may lunch break na 12:00 to 1:00 PM
   const SLOTS = [];
   for (let h = 9; h <= 16; h++) {
     [0, 30].forEach(m => {

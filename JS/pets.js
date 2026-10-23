@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  /* ---------- 1. Pangalan ng user ---------- */
+  /* ---------- 1. Name of User ---------- */
   let displayName = "Justine Salido";
 
   if (currentUser) {

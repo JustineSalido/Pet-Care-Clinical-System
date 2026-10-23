@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  /* ---------- PHP files (palitan ng pangalan ng sa iyo) ---------- */
   const PHP_GET_PETS   = "../PHP/get_pets.php";
   const PHP_GET_BOOKED = "../PHP/get_booked.php";
   const PHP_BOOK       = "../PHP/book.php";
@@ -46,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const VETS = ["Dr. Reyes", "Dr. Santos", "Dr. Cruz"];
 
-  // 9:00 AM to 4:30 PM, may lunch break na 12:00 to 1:00 PM
+  
   const SLOTS = [];
   for (let h = 9; h <= 16; h++) {
     [0, 30].forEach(m => {

@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  /* ---------- 1. Logout, dropdown, bell ---------- */
   function logout() {
     window.location.href = "login.html";
   }
@@ -15,6 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
     e.stopPropagation();
     userMenu.classList.toggle("open");
   });
+  
   document.addEventListener("click", () => userMenu.classList.remove("open"));
 
   document.querySelectorAll(".nav a").forEach(link => {
@@ -27,16 +27,13 @@ document.addEventListener("DOMContentLoaded", () => {
     window.location.href = "notifications.html";
   });
 
-  /* ---------- 2. Sample data (palitan o dagdagan) ---------- */
-  // type: "info" (asul na tuldok) o "alert" (pulang tuldok)
   const notifications = [
-    { id: 1, type: "info",  title: "Appointment confirmed", text: "Your appointment is confirmed for May 15, 2025.", time: "2h ago", unread: true },
-    { id: 2, type: "info",  title: "Reminder",              text: "Vaccination reminder for Luna.",                  time: "1d ago", unread: true },
-    { id: 3, type: "info",  title: "Message from Vet",      text: "You have a new message from Dr. Reyes.",          time: "2d ago", unread: true },
-    { id: 4, type: "alert", title: "Clinic Announcement",   text: "We will be closed on May 30.",                    time: "3d ago", unread: true }
+    { id: 1, type: "info", title: "Appointment confirmed", text: "Your appointment is confirmed for May 15, 2025.", time: "2h ago", unread: true },
+    { id: 2, type: "info", title: "Reminder", text: "Vaccination reminder for Luna.", time: "1d ago", unread: true },
+    { id: 3, type: "info", title: "Message from Vet", text: "You have a new message from Dr. Reyes.", time: "2d ago", unread: true },
+    { id: 4, type: "alert", title: "Clinic Announcement", text: "We will be closed on May 30.", time: "3d ago", unread: true }
   ];
 
-  /* ---------- 3. Helpers ---------- */
   function el(tag, className, text) {
     const node = document.createElement(tag);
     if (className) node.className = className;
@@ -52,7 +49,6 @@ document.addEventListener("DOMContentLoaded", () => {
     bellBadge.classList.toggle("hidden", unread === 0);
   }
 
-  /* ---------- 4. Render ---------- */
   const list = document.getElementById("notifList");
 
   function render() {
