@@ -13,23 +13,29 @@ let DB = {
     { id: 'a1', petId: 'p1', service: 'General Checkup', vetId: 'v1', date: '2026-10-26', time: '10:00', status: 'pending' },
     { id: 'a2', petId: 'p2', service: 'Vaccination', vetId: 'v1', date: '2026-10-27', time: '11:00', status: 'confirmed' },
     { id: 'a3', petId: 'p3', service: 'Follow-up', vetId: 'v2', date: '2026-10-28', time: '14:00', status: 'pending' }
+  ],
+  invoices: [
+    { id: 'i1', clientId: 'c1', service: 'General Checkup', amount: '1000', status: 'Pending' },
+    { id: 'i2', clientId: 'c2', service: 'Vaccination', amount: '800', status: 'Paid' }
   ]
 };
 
 const SERVICES = ['General Checkup', 'Vaccination', 'Follow-up', 'Grooming', 'Consultation'];
 const STATUS = ['pending', 'confirmed', 'completed', 'cancelled'];
+const PAYMENT_STATUS = ['Paid', 'Pending'];
 
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const nm = (t, id) => esc(DB[t].find(r => r.id === id)?.name || '—');
 const opts = t => DB[t].map(r => [r.id, r.name]);
-const badge = s => `<span class="badge ${esc(s)}">${esc(s)}</span>`;
+const badge = s => `<span class="badge ${esc(s).toLowerCase()}">${esc(s)}</span>`;
 
 const NAV = [
   ['Dashboard', 'staff-dashboard.html'], 
   ['Appointments', 'staff-appointments.html'], 
   ['Clients', 'staff-clients.html'], 
-  ['Pets', 'staff-pets.html']
+  ['Pets', 'staff-pets.html'],
+  ['Billing', 'staff-billing.html']
 ];
 
 const LOGOUT_SVG = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>';
@@ -149,6 +155,22 @@ document.addEventListener("DOMContentLoaded", () => {
         { key: 'date', label: 'Date', type: 'date' }, 
         { key: 'time', label: 'Time', type: 'time' }, 
         { key: 'status', label: 'Status', options: () => STATUS.map(s => [s, s]) }
+      ]
+    );
+  }
+  else if (path.includes('staff-billing.html')) {
+    initCrudPage('Billing', 'Manage invoices and payments.', 'Invoice', 'invoices',
+      [
+        { label: 'Client', key: 'clientId', render: (r) => nm('clients', r.clientId) }, 
+        { label: 'Service', key: 'service' }, 
+        { label: 'Amount', key: 'amount', render: (r) => `₱${r.amount}` }, 
+        { label: 'Status', key: 'status', render: (r) => badge(r.status) }
+      ],
+      [
+        { key: 'clientId', label: 'Client', options: () => opts('clients') },
+        { key: 'service', label: 'Service', options: () => SERVICES.map(s => [s, s]) },
+        { key: 'amount', label: 'Amount (₱)', type: 'number' },
+        { key: 'status', label: 'Status', options: () => PAYMENT_STATUS.map(s => [s, s]) }
       ]
     );
   }
