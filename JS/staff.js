@@ -33,6 +33,7 @@ const badge = s => `<span class="badge ${esc(s).toLowerCase()}">${esc(s)}</span>
 const NAV = [
   ['Dashboard', 'staff-dashboard.html'], 
   ['Appointments', 'staff-appointments.html'], 
+  ['Consultations', 'staff-consultation.html'],
   ['Clients', 'staff-clients.html'], 
   ['Pets', 'staff-pets.html'],
   ['Billing', 'staff-billing.html']
@@ -173,6 +174,72 @@ document.addEventListener("DOMContentLoaded", () => {
         { key: 'status', label: 'Status', options: () => PAYMENT_STATUS.map(s => [s, s]) }
       ]
     );
+  }
+  else if (path.includes('staff-consultation.html')) {
+    layout('Consultations', 'Client Consultations', 'Answer inquiries from pet owners.');
+    
+    $('#content').innerHTML = `
+      <div style="display: flex; gap: 20px; height: calc(100vh - 180px);">
+        
+        <div class="card" style="width: 300px; display: flex; flex-direction: column; padding: 20px;">
+          <h2>Inbox</h2>
+          <div style="margin-top: 15px; display: flex; flex-direction: column; gap: 10px;">
+            <div style="padding: 15px; border: 1px solid #d8e6f3; border-radius: 10px; background: #eaf3ff; cursor: pointer;">
+              <strong style="color: #0b3d6e;">Justine Salido</strong><br>
+              <small style="color: #6b7f94;">General Inquiry</small>
+            </div>
+            <div style="padding: 15px; border: 1px solid #d8e6f3; border-radius: 10px; cursor: pointer;">
+              <strong style="color: #0b3d6e;">Maria Cruz</strong><br>
+              <small style="color: #6b7f94;">Billing Question</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="flex: 1; display: flex; flex-direction: column; padding: 20px;">
+          <div style="border-bottom: 1px solid #d8e6f3; padding-bottom: 15px; margin-bottom: 15px;">
+            <h2 style="margin: 0; color: #0b3d6e;">Justine Salido</h2>
+            <small style="color: #6b7f94;">Pet Owner</small>
+          </div>
+
+          <div id="chatBox" style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 15px;">
+            
+            <div style="align-self: flex-start; background: #eaf3ff; padding: 12px 16px; border-radius: 12px; max-width: 70%;">
+              <p style="margin: 0; color: #0b3d6e;">Hi po, ask ko lang kung open ba kayo bukas ng 8am?</p>
+              <small style="color: #6b7f94; font-size: 10px; margin-top: 5px; display: block;">9:00 AM</small>
+            </div>
+
+            <div style="align-self: flex-end; background: #0a7cff; color: white; padding: 12px 16px; border-radius: 12px; max-width: 70%;">
+              <p style="margin: 0;">Hi Justine! Yes po, open kami bukas from 8:00 AM to 5:00 PM. See you!</p>
+              <small style="color: #d8e6f3; font-size: 10px; margin-top: 5px; display: block; text-align: right;">9:02 AM</small>
+            </div>
+
+          </div>
+
+          <div style="display: flex; gap: 10px; margin-top: 15px;">
+            <input type="text" id="staffChatInput" placeholder="Type your reply..." style="flex: 1; padding: 12px; border: 1px solid #d8e6f3; border-radius: 8px; outline: none;">
+            <button class="btn" onclick="sendStaffMessage()">Send</button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    window.sendStaffMessage = function() {
+      const input = document.getElementById('staffChatInput');
+      const msg = input.value.trim();
+      if (!msg) return;
+
+      const chatBox = document.getElementById('chatBox');
+      const newMsg = document.createElement('div');
+      newMsg.style.cssText = "align-self: flex-end; background: #0a7cff; color: white; padding: 12px 16px; border-radius: 12px; max-width: 70%;";
+      newMsg.innerHTML = `
+        <p style="margin: 0;">${esc(msg)}</p>
+        <small style="color: #d8e6f3; font-size: 10px; margin-top: 5px; display: block; text-align: right;">Just now</small>
+      `;
+      
+      chatBox.appendChild(newMsg);
+      input.value = '';
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
   }
 });
 
