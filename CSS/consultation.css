@@ -1,10 +1,12 @@
 .consult-layout {
   display: grid;
-  grid-template-columns: 308px minmax(0, 1fr);
+  grid-template-columns: 300px 1fr;
   gap: 20px;
-  max-width: 960px;
+  max-width: 1000px;
+  margin: 0 auto; 
   height: calc(100vh - 190px);
-  min-height: 520px;
+  min-height: 550px;
+  width: 100%;
 }
 
 .convo-panel,
@@ -88,7 +90,7 @@
 }
 
 .chat-panel {
-  border-radius: 80px;
+  border-radius: 60px;
   padding: 30px 30px 28px;
   display: flex;
   flex-direction: column;
@@ -126,9 +128,9 @@
 }
 
 .msg {
-  max-width: 62%;
-  padding: 18px 22px;
-  border-radius: 12px;
+  max-width: 65%;
+  padding: 16px 20px;
+  border-radius: 16px;
   font-size: 13px;
   line-height: 1.5;
   overflow-wrap: anywhere;
@@ -211,6 +213,7 @@
   .consult-layout {
     grid-template-columns: 1fr;
     height: auto;
+    min-height: calc(100vh - 150px);
   }
   
   .convo-panel {
@@ -222,26 +225,32 @@
     flex-direction: row;
     overflow-x: auto;
     overflow-y: hidden;
+    padding-bottom: 10px;
   }
   
   .convo {
-    min-width: 170px;
+    min-width: 180px;
     width: auto;
   }
   
   .chat-panel {
-    height: 560px;
+    height: 600px;
     border-radius: 40px;
     padding: 26px 22px 22px;
   }
   
   .msg {
-    max-width: 80%;
+    max-width: 85%;
   }
 }
 
 @media (max-width: 500px) {
   .chat-panel {
+    border-radius: 30px;
+    height: calc(100vh - 100px);
+  }
+  
+  .convo-panel {
     border-radius: 30px;
   }
   

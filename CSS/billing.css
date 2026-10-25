@@ -1,11 +1,12 @@
 .invoice-card {
-  max-width: 970px;
+  max-width: 900px;
   min-height: 240px;
-  margin-top: 36px;
+  margin: 36px auto 0; 
   padding: 30px 38px 34px;
   background: #ffffff;
   border: 1.5px solid #d8e6f3;
   border-radius: 70px;
+  width: 100%;
 }
 
 .invoice-card h2 {
@@ -80,11 +81,13 @@
   color: #6b7f94;
 }
 
+/* Ginawang kaparehas ng lapad ng card at naka-center */
 .card-footer {
-  max-width: 970px;
+  max-width: 900px;
   display: flex;
   justify-content: flex-end;
-  margin-top: 20px;
+  margin: 20px auto 0;
+  width: 100%;
   padding-right: 34px;
 }
 
@@ -112,6 +115,7 @@
   }
   .card-footer {
     padding-right: 0;
+    padding: 0 26px;
   }
 }
 

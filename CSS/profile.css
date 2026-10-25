@@ -8,12 +8,15 @@
   --p-ok: #1a7f4b;
 }
 
+/* DITO ANG FIX: Limitado ang lapad at naka-gitna */
 .p-layout {
   display: grid;
   grid-template-columns: 280px minmax(0, 1fr);
   gap: 24px;
   align-items: start;
-  margin-top: 28px;
+  margin: 28px auto 0;
+  max-width: 1000px;
+  width: 100%;
 }
 
 .p-forms { 
@@ -209,6 +212,7 @@
 @media (max-width: 980px) {
   .p-layout { 
     grid-template-columns: 1fr; 
+    max-width: 100%; /* Babalik sa 100% kapag tablet/mobile */
   }
 }
 

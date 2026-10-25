@@ -24,8 +24,11 @@
 
 .pet-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(230px, 250px));
+  /* Ginawang max 280px ang lapad ng card at naka-center */
+  grid-template-columns: repeat(auto-fill, minmax(240px, 280px)); 
   gap: 28px;
+  width: 100%;
+  justify-content: center; /* Pinipigilan ang pag-stretch sa sobrang laki ng screen */
 }
 
 .pet-card,
@@ -254,5 +257,6 @@
   
   .pet-grid {
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    justify-content: flex-start; /* Ibinalik sa stretch kapag mobile/tablet */
   }
 }
