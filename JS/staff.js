@@ -15,14 +15,14 @@ let DB = {
     { id: 'a3', petId: 'p3', service: 'Follow-up', vetId: 'v2', date: '2026-10-28', time: '14:00', status: 'pending' }
   ],
   invoices: [
-    { id: 'i1', clientId: 'c1', service: 'General Checkup', amount: '1000', status: 'Pending' },
-    { id: 'i2', clientId: 'c2', service: 'Vaccination', amount: '800', status: 'Paid' }
+    { id: 'i1', clientId: 'c1', service: 'General Checkup', amount: '1000', status: 'pending' },
+    { id: 'i2', clientId: 'c2', service: 'Vaccination', amount: '800', status: 'paid' }
   ]
 };
 
 const SERVICES = ['General Checkup', 'Vaccination', 'Follow-up', 'Grooming', 'Consultation'];
 const STATUS = ['pending', 'confirmed', 'completed', 'cancelled'];
-const PAYMENT_STATUS = ['Paid', 'Pending'];
+const PAYMENT_STATUS = ['paid', 'pending'];
 
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));

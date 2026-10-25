@@ -5,13 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const passwordInput = document.getElementById("password");
   const forgotLink = document.querySelector(".forgot");
 
-  if (!localStorage.getItem("users")) {
-    const demoUsers = [
-      { username: "admin", email: "admin@petcare.com", password: "123456" }
-    ];
-    localStorage.setItem("users", JSON.stringify(demoUsers));
-  }
-
+  // --- EYE ICON LOGIC  ---
   const eyeOpen = `
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
@@ -45,6 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
     toggleBtn.setAttribute("aria-label", isHidden ? "Hide password" : "Show password");
   });
 
+  // --- MESSAGE BOX LOGIC ---
   const message = document.createElement("p");
   message.className = "form-message";
   form.querySelector(".btn-login").before(message);
@@ -64,13 +59,15 @@ document.addEventListener("DOMContentLoaded", () => {
   usernameInput.addEventListener("input", clearMessage);
   passwordInput.addEventListener("input", clearMessage);
 
-  form.addEventListener("submit", (e) => {
+  // --- LOGIN SUBMIT (CONNECTED TO PHP) ---
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
     clearMessage();
 
-    const userValue = usernameInput.value.trim().toLowerCase();
+    const userValue = usernameInput.value.trim();
     const passValue = passwordInput.value;
 
+    // Validation
     if (userValue === "") {
       usernameInput.classList.add("input-error");
       showMessage("Please enter your email or username.", "error");
@@ -85,32 +82,56 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    const users = JSON.parse(localStorage.getItem("users")) || [];
+    // Disable button 
+    const submitBtn = form.querySelector(".btn-login");
+    submitBtn.disabled = true;
+    showMessage("Logging in...", "success");
 
-    const foundUser = users.find(user =>
-      (user.username.toLowerCase() === userValue || user.email.toLowerCase() === userValue) &&
-      user.password === passValue
-    );
+    try {
+     
+      const response = await fetch('../PHP/login.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          username: userValue,
+          password: passValue
+        })
+      });
 
-    if (!foundUser) {
-      usernameInput.classList.add("input-error");
-      passwordInput.classList.add("input-error");
-      showMessage("Incorrect username or password.", "error");
-      return;
+      const data = await response.json();
+
+      if (data.success) {
+        showMessage("Login successful! Redirecting...", "success");
+        
+        //check the Role from PHP
+        setTimeout(() => {
+          if (data.role === "staff") {
+            window.location.href = "staff-dashboard.html";
+          } else if (data.role === "vet") {
+            window.location.href = "vet-dashboard.html";
+          } else {
+            window.location.href = "dashboard.html"; // Default for client
+          }
+        }, 1000);
+
+      } else {
+        // if the log in is wrong in php
+        usernameInput.classList.add("input-error");
+        passwordInput.classList.add("input-error");
+        showMessage(data.message || "Incorrect username or password.", "error");
+        submitBtn.disabled = false;
+      }
+
+    } catch (error) {
+      console.error("Error:", error);
+      showMessage("Server connection failed. Please try again later.", "error");
+      submitBtn.disabled = false;
     }
-
-    localStorage.setItem("currentUser", JSON.stringify({
-      username: foundUser.username,
-      email: foundUser.email
-    }));
-
-    showMessage("Login successful! Redirecting...", "success");
-
-    setTimeout(() => {
-      window.location.href = "index.html";
-    }, 1200);
   });
 
+  // --- FORGOT PASSWORD ---
   forgotLink.addEventListener("click", (e) => {
     e.preventDefault();
     const email = prompt("Enter your email to reset your password:");
