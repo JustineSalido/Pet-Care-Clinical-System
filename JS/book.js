@@ -5,9 +5,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const PHP_BOOK       = "../PHP/book.php";
   const PHP_LOGOUT     = "../PHP/logout.php";
 
-  /* ---------- 1. Logout, dropdown ---------- */
   function logout() {
-    window.location.href = PHP_LOGOUT;
+    window.location.href = "login.html";
   }
 
   document.getElementById("logoutBtn").addEventListener("click", logout);
@@ -32,7 +31,6 @@ document.addEventListener("DOMContentLoaded", () => {
     window.location.href = "dashboard.html";
   });
 
-  /* ---------- 2. Data ---------- */
   const SERVICES = [
     "General Checkup",
     "Vaccination",
@@ -45,7 +43,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const VETS = ["Dr. Reyes", "Dr. Santos", "Dr. Cruz"];
 
-  
   const SLOTS = [];
   for (let h = 9; h <= 16; h++) {
     [0, 30].forEach(m => {
@@ -59,7 +56,6 @@ document.addEventListener("DOMContentLoaded", () => {
   let pets = [];
   let bookedTimes = [];
 
-  /* ---------- 3. State ---------- */
   const state = {
     petId: "",
     service: "",
@@ -69,7 +65,6 @@ document.addEventListener("DOMContentLoaded", () => {
     reason: ""
   };
 
-  /* ---------- 4. Helpers ---------- */
   function el(tag, className, text) {
     const node = document.createElement(tag);
     if (className) node.className = className;
@@ -98,7 +93,6 @@ document.addEventListener("DOMContentLoaded", () => {
   today.setHours(0, 0, 0, 0);
   const todayKey = dateKey(today.getFullYear(), today.getMonth(), today.getDate());
 
-  /* ---------- 5. Stepper ---------- */
   const STEP_LABELS = ["Pet", "Service", "Veterinarian", "Date & Time", "Reason", "Confirm"];
   const stepper = document.getElementById("stepper");
   let confirmed = false;
@@ -127,7 +121,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* ---------- 6. Screens ---------- */
   const screens = [
     document.getElementById("screen1"),
     document.getElementById("screen2"),
@@ -139,7 +132,6 @@ document.addEventListener("DOMContentLoaded", () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  /* ---------- 7. Selects ---------- */
   const selPet = document.getElementById("selPet");
   const selService = document.getElementById("selService");
   const selVet = document.getElementById("selVet");
@@ -187,7 +179,6 @@ document.addEventListener("DOMContentLoaded", () => {
     updateStepper();
   });
 
-  /* ---------- 8. Calendar ---------- */
   const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const calGrid = document.getElementById("calGrid");
   const calTitle = document.getElementById("calTitle");
@@ -248,19 +239,21 @@ document.addEventListener("DOMContentLoaded", () => {
     renderCalendar();
   });
 
-  /* ---------- 9. Time slots ---------- */
   const slotGrid = document.getElementById("slotGrid");
   const timeNote = document.getElementById("timeNote");
   const reason = document.getElementById("reason");
   const error2 = document.getElementById("error2");
 
   async function loadBooked() {
-    const url = PHP_GET_BOOKED +
-      "?vet=" + encodeURIComponent(state.vet) +
-      "&date=" + encodeURIComponent(state.date);
-
-    const res = await fetch(url);
-    bookedTimes = await res.json();
+    try {
+      const url = PHP_GET_BOOKED +
+        "?vet=" + encodeURIComponent(state.vet) +
+        "&date=" + encodeURIComponent(state.date);
+      const res = await fetch(url);
+      bookedTimes = await res.json();
+    } catch (e) {
+      bookedTimes = []; 
+    }
   }
 
   function renderSlots() {
@@ -300,7 +293,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("backTo1").addEventListener("click", () => showScreen(1));
 
-  /* ---------- 10. Screen 1 -> Screen 2 ---------- */
   document.getElementById("toTime").addEventListener("click", async () => {
     clearError1();
 
@@ -324,18 +316,11 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    try {
-      await loadBooked();
-    } catch (err) {
-      error1.textContent = "Could not load the available times.";
-      return;
-    }
-
+    await loadBooked();
     renderSlots();
     showScreen(2);
   });
 
-  /* ---------- 11. Screen 2 -> Screen 3 ---------- */
   const summary = document.getElementById("summary");
 
   document.getElementById("toConfirm").addEventListener("click", () => {
@@ -355,6 +340,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const pet = getPet();
+    if (!pet) return;
+
     const rows = [
       ["Pet", pet.name + " (" + pet.breed + ")"],
       ["Service", state.service],
@@ -376,7 +363,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("backTo2").addEventListener("click", () => showScreen(2));
 
-  /* ---------- 12. Confirm booking ---------- */
   const error3 = document.getElementById("error3");
   const confirmBtn = document.getElementById("confirmBtn");
 
@@ -423,7 +409,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  /* ---------- Start ---------- */
   async function start() {
     renderCalendar();
     updateStepper();
@@ -431,18 +416,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
     fillSelect(selService, "Choose a service", SERVICES.map(s => ({ value: s, label: s })));
     fillSelect(selVet, "Choose a veterinarian", VETS.map(v => ({ value: v, label: v })));
+    
+    fillSelect(selPet, "Choose your pet", []); 
 
     try {
       const res = await fetch(PHP_GET_PETS);
-      pets = await res.json();
+      if (res.ok) {
+        pets = await res.json();
+        fillSelect(selPet, "Choose your pet", pets.map(p => ({
+          value: String(p.id),
+          label: p.name + " (" + p.breed + ")"
+        })));
+      }
     } catch (err) {
-      error1.textContent = "Could not load your pets.";
+  
+      fillSelect(selPet, "No pets available", []);
     }
-
-    fillSelect(selPet, "Choose your pet", pets.map(p => ({
-      value: String(p.id),
-      label: p.name + " (" + p.breed + ")"
-    })));
   }
 
   start();

@@ -1,4 +1,3 @@
-
 const API = {
   get:      '../PHP/get_profile.php',
   update:   '../PHP/update_profile.php',
@@ -9,9 +8,8 @@ const API = {
 
 const $ = (id) => document.getElementById(id);
 
-/* ---------- helpers ---------- */
 function initials(name) {
-  return (name || '').trim().split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase() || '?';
+  return (name || '').trim().split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase() || '';
 }
 
 function setStatus(el, msg, type) {
@@ -41,7 +39,6 @@ async function postJSON(url, data) {
   return json;
 }
 
-/* ---------- render ---------- */
 function render(user) {
   $('fullName').value = user.full_name || '';
   $('email').value    = user.email || '';
@@ -68,11 +65,11 @@ async function loadProfile() {
     const data = await res.json();
     render(data.user);
   } catch (e) {
-    setStatus($('profileStatus'), 'Could not load your profile. Refresh the page and try again.', 'bad');
+    // Silent fail para sa Live Server (walang error message na lalabas)
+    console.log("Profile could not be loaded. Are you running on XAMPP?");
   }
 }
 
-/* ---------- validation ---------- */
 function validateProfile() {
   const errors = {};
   if (!$('fullName').value.trim()) errors.fullName = 'Enter your full name.';
@@ -90,7 +87,6 @@ function validatePassword() {
   return errors;
 }
 
-/* ---------- save profile ---------- */
 $('profileForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const errors = validateProfile();
@@ -116,7 +112,6 @@ $('profileForm').addEventListener('submit', async (e) => {
   }
 });
 
-/* ---------- change password ---------- */
 $('passwordForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const errors = validatePassword();
@@ -140,7 +135,6 @@ $('passwordForm').addEventListener('submit', async (e) => {
   }
 });
 
-/* ---------- photo upload ---------- */
 $('photoBtn').addEventListener('click', () => $('photoInput').click());
 
 $('photoInput').addEventListener('change', async () => {
@@ -167,10 +161,9 @@ $('photoInput').addEventListener('change', async () => {
   }
 });
 
-/* ---------- top bar: user menu, bell, logout ---------- */
 $('userBtn').addEventListener('click', (e) => {
   e.stopPropagation();
-  $('userMenu').classList.toggle('open');   // match the class your dashboard.css uses
+  $('userMenu').classList.toggle('open'); 
 });
 document.addEventListener('click', () => $('userMenu').classList.remove('open'));
 

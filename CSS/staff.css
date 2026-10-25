@@ -108,10 +108,14 @@ body {
   flex: 1; 
   min-width: 0; 
   padding: 44px 36px; 
+  display: flex; /* Idinagdag para ma-center */
+  justify-content: center; /* Idinagdag para ma-center */
 }
 
 .content { 
+  width: 100%;
   max-width: 1100px; 
+  margin: 0 auto; /* Ito ang maglalagay sa gitna */
 }
 
 .topbar { 
@@ -494,6 +498,9 @@ td:last-child button {
   border-radius: 10px; 
 }
 
+/* ==========================================
+   RESPONSIVE DESIGN
+   ========================================== */
 @media (max-width: 950px) {
   #app { 
     flex-direction: column; 

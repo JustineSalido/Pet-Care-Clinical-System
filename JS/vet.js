@@ -1,26 +1,5 @@
-let DB = {
-  pets: [
-    { id: 'p1', ownerId: 'c1', name: 'Bella', species: 'Dog', breed: 'Golden Retriever', age: '2' },
-    { id: 'p2', ownerId: 'c1', name: 'Luna', species: 'Cat', breed: 'Persian', age: '1' },
-    { id: 'p3', ownerId: 'c2', name: 'Max', species: 'Dog', breed: 'Shih Tzu', age: '4' }
-  ],
-  clients: [
-    { id: 'c1', name: 'Justine Salido' },
-    { id: 'c2', name: 'Maria Cruz' }
-  ],
-  appointments: [
-    { id: 'a1', petId: 'p1', service: 'General Checkup', vetId: 'v1', date: '2026-10-26', time: '10:00', status: 'confirmed' },
-    { id: 'a3', petId: 'p3', service: 'Follow-up', vetId: 'v1', date: '2026-10-28', time: '14:00', status: 'pending' }
-  ],
-  medical_records: [
-    { id: 'm1', petId: 'p1', diagnosis: 'Healthy', treatment: 'None', date: '2026-10-01' }
-  ]
-};
-
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-const nm = (t, id) => esc(DB[t].find(r => r.id === id)?.name || '—');
-const opts = t => DB[t].map(r => [r.id, r.name]);
 
 const NAV = [
   ['Dashboard', 'vet-dashboard.html'], 
@@ -44,7 +23,9 @@ function layout(active, title, sub) {
         <div class="user-area">
           <div class="user-menu-wrap">
             <button type="button" class="user-btn" id="userBtn">
-              <span class="avatar" style="background:#16a34a;">DR</span><span>Dr. Reyes</span><span class="caret"></span>
+              <span class="avatar" style="background:#16a34a;"></span>
+              <span></span>
+              <span class="caret"></span>
             </button>
             <div class="user-menu" id="userMenu">
               <button type="button" onclick="window.location.href='login.html'">Logout</button>
@@ -83,26 +64,15 @@ document.addEventListener("DOMContentLoaded", () => {
   if (path.includes('vet-dashboard.html')) {
     layout('Dashboard', 'Vet Dashboard', 'Your schedule and patient overview for today.');
     
-    const myAppts = DB.appointments.filter(a => a.vetId === 'v1' && a.status === 'confirmed');
-    const totalPatients = [...new Set(DB.medical_records.map(m => m.petId))].length;
-
     $('#content').innerHTML = `
       <div class="stats">
-        <div class="card stat"><b>${myAppts.length}</b><span>Today's Consultations</span></div>
-        <div class="card stat"><b>${totalPatients}</b><span>Total Patients Treated</span></div>
+        <div class="card stat"><b>0</b><span>Today's Consultations</span></div>
+        <div class="card stat"><b>0</b><span>Total Patients Treated</span></div>
       </div>
       
       <div class="card">
         <h2>My Schedule Today</h2>
-        ${myAppts.length ? myAppts.map(a => `
-          <div class="item">
-            <div>
-              <b>${nm('pets', a.petId)}</b> (Owner: ${nm('clients', DB.pets.find(p=>p.id===a.petId)?.ownerId)})<br>
-              <small>${a.date} • ${a.time} • ${esc(a.service)}</small>
-            </div>
-            <button class="btn" onclick="window.location.href='vet-consultation.html'">Start Consult</button>
-          </div>
-        `).join('') : '<p class="empty">No confirmed appointments for today.</p>'}
+        <p class="empty">No confirmed appointments for today.</p>
       </div>
     `;
   } 
@@ -112,36 +82,24 @@ document.addEventListener("DOMContentLoaded", () => {
     
     $('#content').innerHTML = `
       <div style="display: flex; gap: 20px; height: calc(100vh - 180px);">
-        
         <div class="card" style="width: 300px; display: flex; flex-direction: column; padding: 20px;">
           <h2>Conversations</h2>
           <div style="margin-top: 15px; display: flex; flex-direction: column; gap: 10px;">
             <div style="padding: 15px; border: 1px solid #d8e6f3; border-radius: 10px; background: #eaf3ff; cursor: pointer;">
-              <strong style="color: #0b3d6e;">Justine Salido</strong><br>
-              <small style="color: #6b7f94;">Owner of Bella</small>
-            </div>
-            <div style="padding: 15px; border: 1px solid #d8e6f3; border-radius: 10px; cursor: pointer;">
-              <strong style="color: #0b3d6e;">Maria Cruz</strong><br>
-              <small style="color: #6b7f94;">Owner of Max</small>
+              <strong style="color: #0b3d6e;">Client</strong><br>
+              <small style="color: #6b7f94;">Pet Owner</small>
             </div>
           </div>
         </div>
 
         <div class="card" style="flex: 1; display: flex; flex-direction: column; padding: 20px;">
           <div style="border-bottom: 1px solid #d8e6f3; padding-bottom: 15px; margin-bottom: 15px;">
-            <h2 style="margin: 0; color: #0b3d6e;">Justine Salido</h2>
-            <small style="color: #6b7f94;">Pet: Bella (Golden Retriever)</small>
+            <h2 style="margin: 0; color: #0b3d6e;">Client</h2>
+            <small style="color: #6b7f94;">Pet Owner</small>
           </div>
 
           <div id="chatBox" style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 15px;">
-            <div style="align-self: flex-start; background: #eaf3ff; padding: 12px 16px; border-radius: 12px; max-width: 70%;">
-              <p style="margin: 0; color: #0b3d6e;">Hi Doc, my dog has been less active today. Is this normal?</p>
-              <small style="color: #6b7f94; font-size: 10px; margin-top: 5px; display: block;">9:00 AM</small>
-            </div>
-            <div style="align-self: flex-end; background: #0a7cff; color: white; padding: 12px 16px; border-radius: 12px; max-width: 70%;">
-              <p style="margin: 0;">Hello Justine. How long has Bella been inactive? Is she eating well?</p>
-              <small style="color: #d8e6f3; font-size: 10px; margin-top: 5px; display: block; text-align: right;">9:02 AM</small>
-            </div>
+            <p class="empty" style="text-align: center; margin-top: 20px;">No messages yet. Say hello!</p>
           </div>
 
           <div style="display: flex; gap: 10px; margin-top: 15px;">
@@ -158,6 +116,9 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!msg) return;
 
       const chatBox = document.getElementById('chatBox');
+      const emptyMsg = chatBox.querySelector('.empty');
+      if (emptyMsg) emptyMsg.remove();
+
       const newMsg = document.createElement('div');
       newMsg.style.cssText = "align-self: flex-end; background: #0a7cff; color: white; padding: 12px 16px; border-radius: 12px; max-width: 70%;";
       newMsg.innerHTML = `
@@ -172,105 +133,54 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   else if (path.includes('vet-records.html')) {
-    initVetRecords('Medical Records', 'Manage patient history and prescriptions.', 'Record', 'medical_records', 
-      [
-        { label: 'Patient (Pet)', key: 'petId', render: (r) => nm('pets', r.petId) }, 
-        { label: 'Diagnosis', key: 'diagnosis' }, 
-        { label: 'Treatment/Notes', key: 'treatment' },
-        { label: 'Date', key: 'date' }
-      ],
-      [
-        { key: 'petId', label: 'Select Patient', options: () => opts('pets') },
-        { key: 'diagnosis', label: 'Diagnosis' },
-        { key: 'treatment', label: 'Prescription / Treatment' },
-        { key: 'date', label: 'Date', type: 'date' }
-      ]
-    );
+    // Dito ang fix para wala nang "undefined" at gagana na ang Add Record button
+    initVetRecords('Medical Records', 'Manage patient history and prescriptions.');
   }
 });
 
-let redrawCurrentTable = null;
-
-function initVetRecords(title, sub, single, table, cols, fields) {
-  layout(title, title, sub);
+// BUONG LOGIC PARA SA MEDICAL RECORDS MODAL
+function initVetRecords(title, sub) {
+  layout('Medical Records', title, sub);
   
   $('#content').innerHTML = `
-    <div class="actions"><button class="btn" id="addBtn">+ Add ${single}</button></div>
+    <div class="actions"><button class="btn" id="addBtn">+ Add Record</button></div>
     <div class="card">
-      <input class="search" id="searchInput" placeholder="Search records...">
-      <table>
-        <thead><tr>${cols.map(c => `<th>${c.label}</th>`).join('')}<th>Actions</th></tr></thead>
-        <tbody id="tableBody"></tbody>
-      </table>
-      <p class="empty" id="emptyMsg" hidden>No records found.</p>
+      <p class="empty" id="emptyMsg">No records found.</p>
     </div>`;
 
-  redrawCurrentTable = (query = '') => {
-    const tbody = $('#tableBody');
-    const empty = $('#emptyMsg');
-    
-    const filteredData = DB[table].filter(row => 
-      cols.some(c => String(row[c.key]).toLowerCase().includes(query.toLowerCase()))
-    );
-    
-    tbody.innerHTML = filteredData.map(row => `
-      <tr>
-        ${cols.map(c => `<td>${c.render ? c.render(row) : esc(row[c.key])}</td>`).join('')}
-        <td>
-          <button class="btn-o" onclick="triggerVetEdit('${table}', '${row.id}', ${JSON.stringify(fields).replace(/"/g, '&quot;')}, '${single}')">Update</button>
-        </td>
-      </tr>
-    `).join('');
-    empty.hidden = filteredData.length > 0;
-  };
-
-  redrawCurrentTable(); 
-  
-  $('#searchInput').addEventListener('input', (e) => redrawCurrentTable(e.target.value));
-  
   $('#addBtn').addEventListener('click', () => {
-    openVetModal(table, null, fields, single);
+    openVetModal();
   });
 }
 
-function openVetModal(table, record, fields, single) {
-  const isEdit = record !== null;
+function openVetModal() {
   const modal = document.createElement('div');
   modal.className = 'modal';
   
-  modal.innerHTML = `<form class="card"><h2>${isEdit ? 'Update' : 'Add'} ${single}</h2>
-    ${fields.map(f => {
-      const val = isEdit ? record[f.key] : '';
-      if (f.options) {
-        return `<div class="f"><label>${f.label}</label><select name="${f.key}" required>
-          ${f.options().map(([v, t]) => `<option value="${v}" ${v === val ? 'selected' : ''}>${t}</option>`).join('')}
-        </select></div>`;
-      }
-      return `<div class="f"><label>${f.label}</label><input name="${f.key}" type="${f.type || 'text'}" value="${esc(val)}" required></div>`;
-    }).join('')}
-    <div class="row"><button type="button" class="btn-o" onclick="this.closest('.modal').remove()">Cancel</button><button class="btn">Save</button></div>
-  </form>`;
+  modal.innerHTML = `
+    <form class="card">
+      <h2>Add Record</h2>
+      <div class="f">
+        <label>Patient (Pet)</label>
+        <input type="text" placeholder="Pet's name" required>
+      </div>
+      <div class="f">
+        <label>Diagnosis</label>
+        <input type="text" placeholder="Diagnosis" required>
+      </div>
+      <div class="f">
+        <label>Treatment/Notes</label>
+        <input type="text" placeholder="Prescription / Treatment" required>
+      </div>
+      <div class="f">
+        <label>Date</label>
+        <input type="date" required>
+      </div>
+      <div class="row">
+        <button type="button" class="btn-o" onclick="this.closest('.modal').remove()">Cancel</button>
+        <button class="btn" onclick="event.preventDefault(); this.closest('.modal').remove();">Save</button>
+      </div>
+    </form>`;
 
   document.body.appendChild(modal);
-
-  modal.querySelector('form').onsubmit = (e) => {
-    e.preventDefault();
-    const data = Object.fromEntries(new FormData(e.target));
-    
-    if (isEdit) {
-      const idx = DB[table].findIndex(r => r.id === record.id);
-      DB[table][idx] = { ...DB[table][idx], ...data };
-    } else {
-      data.id = 'x' + Date.now();
-      DB[table].push(data);
-    }
-    
-    modal.remove();
-    if(redrawCurrentTable) redrawCurrentTable(); 
-  };
-}
-
-window.triggerVetEdit = function(table, id, fields, single) {
-  const record = DB[table].find(r => r.id === id);
-  openVetModal(table, record, fields, single); 
 }

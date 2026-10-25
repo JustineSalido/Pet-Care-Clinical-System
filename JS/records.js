@@ -1,7 +1,15 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+  function el(tag, className, text) {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text !== undefined) node.textContent = text;
+    return node;
+  }
+
   function logout() {
-    window.location.href = "login.html";
+    fetch("../PHP/logout.php", { method: "POST", credentials: "same-origin" })
+      .finally(() => { window.location.href = "login.html"; });
   }
 
   document.getElementById("logoutBtn").addEventListener("click", logout);
@@ -30,48 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
     window.location.href = "dashboard.html";
   });
 
-  const records = {
-    Bella: {
-      vaccinations: [
-        { date: "2024-01-10", vaccine: "Rabies", nextDue: "2025-01-10", status: "Completed" },
-        { date: "2024-02-15", vaccine: "DHPP", nextDue: "2025-02-15", status: "Completed" },
-        { date: "2024-03-20", vaccine: "Bordetella", nextDue: "2025-03-20", status: "Completed" }
-      ],
-      diagnoses: [
-        { date: "2025-04-12", diagnosis: "Mild gastritis", vet: "Dr. Reyes" },
-        { date: "2025-04-30", diagnosis: "Healthy (routine checkup)", vet: "Dr. Reyes" }
-      ],
-      treatments: [
-        { date: "2025-04-12", treatment: "Anti-nausea medication", vet: "Dr. Reyes", status: "Completed" },
-        { date: "2025-04-30", treatment: "Routine checkup", vet: "Dr. Reyes", status: "Completed" }
-      ],
-      prescriptions: [
-        { date: "2025-04-12", medication: "Anti-nausea medication", dosage: "1 tablet once a day", duration: "3 days" }
-      ],
-      history: [
-        { date: "2025-04-12", condition: "Vomiting", outcome: "Treated with anti-nausea medication" },
-        { date: "2025-04-30", condition: "Routine Checkup", outcome: "Healthy" }
-      ]
-    },
-    Luna: {
-      vaccinations: [
-        { date: "2024-06-12", vaccine: "Rabies", nextDue: "2025-06-12", status: "Completed" },
-        { date: "2024-07-10", vaccine: "FVRCP", nextDue: "2025-07-10", status: "Due" }
-      ],
-      diagnoses: [
-        { date: "2025-03-02", diagnosis: "Mild eye irritation", vet: "Dr. Santos" }
-      ],
-      treatments: [
-        { date: "2025-03-02", treatment: "Eye drops", vet: "Dr. Santos", status: "Ongoing" }
-      ],
-      prescriptions: [
-        { date: "2025-03-02", medication: "Eye drops", dosage: "1 drop in each eye, twice a day", duration: "7 days" }
-      ],
-      history: [
-        { date: "2025-03-02", condition: "Eye discharge", outcome: "Treated with eye drops" }
-      ]
-    }
-  };
+  const records = {};
 
   const TABS = {
     vaccinations: {
@@ -94,13 +61,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const HISTORY_COLUMNS = [["Date", "date", "date"], ["Condition", "condition"], ["Outcome", "outcome"]];
 
-  function el(tag, className, text) {
-    const node = document.createElement(tag);
-    if (className) node.className = className;
-    if (text !== undefined) node.textContent = text;
-    return node;
-  }
-
   function prettyDate(key) {
     const parts = String(key).split("-").map(Number);
     if (parts.length !== 3 || parts.some(isNaN)) return key;
@@ -121,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function renderTable(box, columns, rows, showHead) {
     box.innerHTML = "";
 
-    if (rows.length === 0) {
+    if (!rows || rows.length === 0) {
       box.appendChild(el("p", "empty-note", "No records yet."));
       return;
     }
@@ -168,21 +128,20 @@ document.addEventListener("DOMContentLoaded", () => {
   const historyBox = document.getElementById("historyBox");
   const tabButtons = document.querySelectorAll(".tab");
 
-  let activePet = Object.keys(records)[0];
+  let activePet = null;
   let activeTab = "vaccinations";
 
-  Object.keys(records).forEach(name => {
-    const option = document.createElement("option");
-    option.value = name;
-    option.textContent = name;
-    petSelect.appendChild(option);
-  });
-
   function render() {
-    const data = records[activePet];
     const tab = TABS[activeTab];
-
     recordsTitle.textContent = tab.title;
+
+    if (!activePet || !records[activePet]) {
+      renderTable(recordsBox, tab.columns, [], true);
+      renderTable(historyBox, HISTORY_COLUMNS, [], false);
+      return;
+    }
+
+    const data = records[activePet];
     renderTable(recordsBox, tab.columns, data[activeTab], true);
     renderTable(historyBox, HISTORY_COLUMNS, data.history, false);
   }

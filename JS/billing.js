@@ -1,8 +1,15 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  /* ---------- 1. Logout, dropdown, bell ---------- */
+  function el(tag, className, text) {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text !== undefined) node.textContent = text;
+    return node;
+  }
+
   function logout() {
-    window.location.href = "login.html";
+    fetch("../PHP/logout.php", { method: "POST", credentials: "same-origin" })
+      .finally(() => { window.location.href = "login.html"; });
   }
 
   document.getElementById("logoutBtn").addEventListener("click", logout);
@@ -30,25 +37,9 @@ document.addEventListener("DOMContentLoaded", () => {
     window.location.href = "dashboard.html";
   });
 
-  // status: "Paid" o "Pending"
-  const invoices = [
-    { date: "2025-05-15", description: "General Checkup (Bella)", amount: 1000, status: "Pending" },
-    { date: "2025-04-28", description: "Vaccination (Luna)",      amount: 800,  status: "Paid" },
-    { date: "2025-04-20", description: "Consultation (Bella)",    amount: 600,  status: "Paid" },
-    { date: "2025-02-12", description: "Grooming (Luna)",         amount: 1200, status: "Paid" },
-    { date: "2025-01-10", description: "Rabies Vaccine (Bella)",  amount: 700,  status: "Paid" },
-    { date: "2024-12-05", description: "Dental Cleaning (Luna)",  amount: 1500, status: "Paid" }
-  ];
+  let invoices = [];
 
   const PREVIEW_COUNT = 4;
-
-  /* ---------- 3. Helpers ---------- */
-  function el(tag, className, text) {
-    const node = document.createElement(tag);
-    if (className) node.className = className;
-    if (text !== undefined) node.textContent = text;
-    return node;
-  }
 
   function prettyDate(key) {
     const parts = String(key).split("-").map(Number);
@@ -64,15 +55,14 @@ document.addEventListener("DOMContentLoaded", () => {
     return "\u20B1" + Number(amount).toLocaleString("en-US");
   }
 
-  /* ---------- 4. Render ---------- */
   const box = document.getElementById("invoiceBox");
   const viewAllBtn = document.getElementById("viewAllBtn");
   let showAll = false;
 
-  const sorted = invoices.slice().sort((a, b) => b.date.localeCompare(a.date));
-
   function render() {
     box.innerHTML = "";
+
+    const sorted = invoices.slice().sort((a, b) => b.date.localeCompare(a.date));
 
     if (sorted.length === 0) {
       box.appendChild(el("p", "empty-note", "No invoices yet."));

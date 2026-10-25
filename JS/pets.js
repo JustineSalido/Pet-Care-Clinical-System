@@ -1,39 +1,32 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  /* ---------- Settings ---------- */
-  const REQUIRE_LOGIN = false;
+  fetch("../PHP/get_profile.php", { credentials: "same-origin" })
+    .then(async response => {
+      if (response.status === 401) {
+        window.location.href = "login.html";
+        return null;
+      }
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.message || "Could not load profile.");
+      return result.user;
+    })
+    .then(user => {
+      if (!user) return;
+      const displayName = user.full_name;
+      const initials = displayName.split(/\s+/).map(word => word[0]).slice(0, 2).join("").toUpperCase();
 
-  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+      const userNameEl = document.getElementById("userName");
+      const userAvatarEl = document.getElementById("userAvatar");
+      
+      if (userNameEl) userNameEl.textContent = displayName;
+      if (userAvatarEl) userAvatarEl.textContent = initials;
+    })
+    .catch(() => {
+    });
 
-  if (REQUIRE_LOGIN && !currentUser) {
-    window.location.href = "login.html";
-    return;
-  }
-
-  /* ---------- 1. Name of User ---------- */
-  let displayName = "Justine Salido";
-
-  if (currentUser) {
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-    const account = users.find(u => u.email === currentUser.email);
-    displayName = (account && account.fullName) || currentUser.username || displayName;
-    displayName = displayName.charAt(0).toUpperCase() + displayName.slice(1);
-  }
-
-  const initials = displayName
-    .split(" ")
-    .map(word => word.charAt(0))
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
-
-  document.getElementById("userName").textContent = displayName;
-  document.getElementById("userAvatar").textContent = initials;
-
-  /* ---------- 2. Logout, dropdown, bell ---------- */
   function logout() {
-    localStorage.removeItem("currentUser");
-    window.location.href = "login.html";
+    fetch("../PHP/logout.php", { method: "POST", credentials: "same-origin" })
+      .finally(() => { window.location.href = "login.html"; });
   }
 
   document.getElementById("logoutBtn").addEventListener("click", logout);
@@ -48,42 +41,18 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   document.addEventListener("click", () => userMenu.classList.remove("open"));
 
-  const savedNotifs = JSON.parse(localStorage.getItem("notifications"));
-  const notifTotal = savedNotifs ? savedNotifs.length : 3;
   const bellBadge = document.getElementById("bellBadge");
-  bellBadge.textContent = notifTotal;
-  bellBadge.classList.toggle("hidden", notifTotal === 0);
+  if (bellBadge) {
+    bellBadge.textContent = 0;
+    bellBadge.classList.add("hidden");
+  }
 
   document.getElementById("bellBtn").addEventListener("click", () => {
     window.location.href = "dashboard.html";
   });
 
-  /* ---------- 3. Pets data ---------- */
-  let pets = JSON.parse(localStorage.getItem("pets"));
+  let pets = [];
 
-  if (!pets) {
-    pets = [
-      { name: "Bella", type: "Dog", breed: "Golden Retriever", age: "2 years old" },
-      { name: "Luna", type: "Cat", breed: "Persian Cat", age: "1 year old" }
-    ];
-  }
-
-  pets.forEach((pet, i) => {
-    if (!pet.id) pet.id = Date.now() + i;
-  });
-
-  function savePets() {
-    try {
-      localStorage.setItem("pets", JSON.stringify(pets));
-      return true;
-    } catch (err) {
-      return false;
-    }
-  }
-
-  savePets();
-
-  /* ---------- 4. Helpers ---------- */
   function el(tag, className, text) {
     const node = document.createElement(tag);
     if (className) node.className = className;
@@ -121,7 +90,6 @@ document.addEventListener("DOMContentLoaded", () => {
     reader.readAsDataURL(file);
   }
 
-  /* ---------- 5. Render cards ---------- */
   const grid = document.getElementById("petGrid");
 
   function renderPets() {
@@ -165,9 +133,6 @@ document.addEventListener("DOMContentLoaded", () => {
     grid.appendChild(addCard);
   }
 
-  renderPets();
-
-  /* ---------- 6. Add / Edit popup ---------- */
   const formOverlay = el("div", "modal-overlay");
   formOverlay.innerHTML = `
     <div class="modal">
@@ -207,6 +172,22 @@ document.addEventListener("DOMContentLoaded", () => {
   const petAge = formOverlay.querySelector("#petAge");
   const petError = formOverlay.querySelector("#petError");
   const deleteBtn = formOverlay.querySelector("#deleteBtn");
+
+  fetch("../PHP/get_pets.php", { credentials: "same-origin" })
+    .then(async response => {
+      if (response.status === 401) {
+        window.location.href = "login.html";
+        return [];
+      }
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.message || "Could not load pets.");
+      return result;
+    })
+    .then(data => { pets = data; renderPets(); })
+    .catch(() => { 
+      // Walang error message na lalabas sa Live Server
+      renderPets(); 
+    });
 
   let editingId = null;
   let photoData = "";
@@ -268,7 +249,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  petForm.addEventListener("submit", (e) => {
+  petForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     const name = petName.value.trim();
@@ -279,8 +260,6 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    const backup = JSON.stringify(pets);
-
     const data = {
       name: name,
       type: petType.value,
@@ -289,36 +268,52 @@ document.addEventListener("DOMContentLoaded", () => {
       photo: photoData
     };
 
-    if (editingId) {
-      const index = pets.findIndex(p => p.id === editingId);
-      pets[index] = Object.assign({}, pets[index], data);
-    } else {
-      pets.push(Object.assign({ id: Date.now() }, data));
+    const saveButton = petForm.querySelector('[type="submit"]');
+    saveButton.disabled = true;
+    try {
+      const response = await fetch("../PHP/pets.php" + (editingId ? "?id=" + encodeURIComponent(editingId) : ""), {
+        method: editingId ? "PUT" : "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",
+        body: JSON.stringify(data)
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.message || "Could not save your pet.");
+      if (editingId) {
+        pets = pets.map(pet => String(pet.id) === String(editingId) ? result.pet : pet);
+      } else {
+        pets.unshift(result.pet);
+      }
+      renderPets();
+      closeForm();
+    } catch (error) {
+      petError.textContent = error.message || "Could not reach the server. Please try again.";
+    } finally {
+      saveButton.disabled = false;
     }
-
-    if (!savePets()) {
-      pets = JSON.parse(backup);
-      petError.textContent = "Storage is full. Try a smaller photo.";
-      return;
-    }
-
-    renderPets();
-    closeForm();
   });
 
-  deleteBtn.addEventListener("click", () => {
+  deleteBtn.addEventListener("click", async () => {
     const pet = pets.find(p => p.id === editingId);
     if (!pet) return;
 
     if (confirm("Delete " + pet.name + "? This cannot be undone.")) {
-      pets = pets.filter(p => p.id !== editingId);
-      savePets();
-      renderPets();
-      closeForm();
+      try {
+        const response = await fetch("../PHP/pets.php?id=" + encodeURIComponent(editingId), {
+          method: "DELETE",
+          credentials: "same-origin"
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.message || "Could not delete the pet.");
+        pets = pets.filter(pet => String(pet.id) !== String(editingId));
+        renderPets();
+        closeForm();
+      } catch (error) {
+        petError.textContent = error.message || "Could not reach the server. Please try again.";
+      }
     }
   });
 
-  /* ---------- 7. View profile popup ---------- */
   const viewOverlay = el("div", "modal-overlay");
   viewOverlay.innerHTML = `
     <div class="modal">

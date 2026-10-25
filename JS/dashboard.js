@@ -1,38 +1,37 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  /* ---------- Settings ---------- */
-  const REQUIRE_LOGIN = false;
-
-  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-
-  if (REQUIRE_LOGIN && !currentUser) {
-    window.location.href = "login.html";
-    return;
+  function el(tag, className, text) {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text !== undefined) node.textContent = text;
+    return node;
   }
 
-  /* ---------- 1. Name ofuser ---------- */
-  let displayName = "Justine Salido";
+  fetch("../PHP/get_profile.php", { credentials: "same-origin" })
+    .then(async response => {
+      if (response.status === 401) {
+        window.location.href = "login.html";
+        return null;
+      }
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.message || "Could not load profile.");
+      return result.user;
+    })
+    .then(user => {
+      if (!user) return;
+      const displayName = user.full_name;
+      
+      const welcomeEl = document.getElementById("welcomeName");
+      const nameEl = document.getElementById("userName");
+      const avatarEl = document.getElementById("userAvatar");
+      
+      if (welcomeEl) welcomeEl.textContent = displayName.split(/\s+/)[0];
+      if (nameEl) nameEl.textContent = displayName;
+      if (avatarEl) avatarEl.textContent = displayName.split(/\s+/).map(word => word[0]).slice(0, 2).join("").toUpperCase();
+    })
+    .catch(() => {
+    });
 
-  if (currentUser) {
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-    const account = users.find(u => u.email === currentUser.email);
-    displayName = (account && account.fullName) || currentUser.username || displayName;
-    displayName = displayName.charAt(0).toUpperCase() + displayName.slice(1);
-  }
-
-  const firstName = displayName.split(" ")[0];
-  const initials = displayName
-    .split(" ")
-    .map(word => word.charAt(0))
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
-
-  document.getElementById("welcomeName").textContent = firstName;
-  document.getElementById("userName").textContent = displayName;
-  document.getElementById("userAvatar").textContent = initials;
-
-  /* ---------- 2. Sidebar links ---------- */
   document.querySelectorAll(".nav a").forEach(link => {
     link.addEventListener("click", (e) => {
       if (link.getAttribute("href") === "#") {
@@ -41,16 +40,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  /* ---------- 3. Logout ---------- */
   function logout() {
-    localStorage.removeItem("currentUser");
-    window.location.href = "login.html";
+    fetch("../PHP/logout.php", { method: "POST", credentials: "same-origin" })
+      .finally(() => { window.location.href = "login.html"; });
   }
 
   document.getElementById("logoutBtn").addEventListener("click", logout);
   document.getElementById("menuLogout").addEventListener("click", logout);
 
-  /* ---------- 4. User dropdown ---------- */
   const userBtn = document.getElementById("userBtn");
   const userMenu = document.getElementById("userMenu");
 
@@ -61,18 +58,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.addEventListener("click", () => userMenu.classList.remove("open"));
 
-  /* ---------- 5. Pets ---------- */
   const petList = document.getElementById("petList");
   const totalPets = document.getElementById("totalPets");
 
-  let pets = JSON.parse(localStorage.getItem("pets"));
-  if (!pets) {
-    pets = [
-      { name: "Bella", breed: "Golden Retriever", age: "2 years old" },
-      { name: "Luna", breed: "Persian Cat", age: "1 year old" }
-    ];
-    localStorage.setItem("pets", JSON.stringify(pets));
-  }
+  let pets = [];
 
   function renderPets() {
     petList.innerHTML = "";
@@ -97,7 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const strong = document.createElement("strong");
       strong.textContent = pet.name;
       line.appendChild(strong);
-      line.append(" — " + pet.breed + " — " + pet.age);
+      line.append(" — " + (pet.breed || pet.type) + " — " + (pet.age || "Age not set"));
 
       const viewBtn = document.createElement("button");
       viewBtn.type = "button";
@@ -114,22 +103,28 @@ document.addEventListener("DOMContentLoaded", () => {
     totalPets.textContent = pets.length;
   }
 
-  renderPets();
+  fetch("../PHP/get_pets.php", { credentials: "same-origin" })
+    .then(async response => {
+      if (response.status === 401) {
+        window.location.href = "login.html";
+        return [];
+      }
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.message || "Could not load pets.");
+      return result;
+    })
+    .then(data => { pets = data; renderPets(); })
+    .catch(() => {
+      // Silent fail kapag Live Server
+      petList.innerHTML = "";
+      petList.appendChild(el("p", "empty", "No pets yet. Add your first pet."));
+    });
 
-  /* ---------- 6. Notifications ---------- */
   const notifList = document.getElementById("notifList");
   const notifCount = document.getElementById("notifCount");
   const bellBadge = document.getElementById("bellBadge");
 
-  let notifications = JSON.parse(localStorage.getItem("notifications"));
-  if (!notifications) {
-    notifications = [
-      "Appointment confirmed",
-      "Reminder: vaccination for Luna",
-      "Message from Dr. Reyes"
-    ];
-    localStorage.setItem("notifications", JSON.stringify(notifications));
-  }
+  let notifications = [];
 
   function renderNotifications() {
     notifList.innerHTML = "";
@@ -156,7 +151,6 @@ document.addEventListener("DOMContentLoaded", () => {
       item.append(dot, label);
       item.addEventListener("click", () => {
         notifications.splice(index, 1);
-        localStorage.setItem("notifications", JSON.stringify(notifications));
         renderNotifications();
       });
 
@@ -174,7 +168,6 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("notifCard").scrollIntoView({ behavior: "smooth", block: "center" });
   });
 
-  /* ---------- 7. Add pet popup ---------- */
   const modal = document.createElement("div");
   modal.className = "modal-overlay";
   modal.innerHTML = `
@@ -225,7 +218,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (e.key === "Escape") closeModal();
   });
 
-  petForm.addEventListener("submit", (e) => {
+  petForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     const name = petName.value.trim();
@@ -236,17 +229,33 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    pets.push({
-      id: Date.now(),
+    const pet = {
       name: name,
       type: petType.value,
       breed: petBreed.value.trim() || petType.value,
       age: petAge.value.trim() || "Age not set"
-    });
-
-    localStorage.setItem("pets", JSON.stringify(pets));
-    renderPets();
-    closeModal();
+    };
+    
+    const saveButton = petForm.querySelector('[type="submit"]');
+    saveButton.disabled = true;
+    try {
+      const response = await fetch("../PHP/pets.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",
+        body: JSON.stringify(pet)
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.message || "Could not save your pet.");
+      
+      pets.unshift(result.pet);
+      renderPets();
+      closeModal();
+    } catch (error) {
+      petError.textContent = error.message || "Could not reach the server. Please try again.";
+    } finally {
+      saveButton.disabled = false;
+    }
   });
 
 });

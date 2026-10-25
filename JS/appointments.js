@@ -1,8 +1,15 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  /* ---------- 1. Logout, dropdown, bell ---------- */
+  function el(tag, className, text) {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text !== undefined) node.textContent = text;
+    return node;
+  }
+
   function logout() {
-    window.location.href = "login.html";
+    fetch("../PHP/logout.php", { method: "POST", credentials: "same-origin" })
+      .finally(() => { window.location.href = "login.html"; });
   }
 
   document.getElementById("logoutBtn").addEventListener("click", logout);
@@ -30,21 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
     window.location.href = "dashboard.html";
   });
 
-  /* ---------- 2. Sample data (palitan o dagdagan) ---------- */
-  // status: "Confirmed" (upcoming), "Completed", o "Cancelled"
-  const appointments = [
-    { id: 1, petName: "Bella", service: "General Checkup", vet: "Dr. Reyes", date: "2025-05-15", time: "10:00 AM", status: "Confirmed" },
-    { id: 2, petName: "Luna",  service: "Vaccination",     vet: "Dr. Reyes", date: "2025-05-15", time: "10:00 AM", status: "Confirmed" },
-    { id: 3, petName: "Bella", service: "Follow-up",       vet: "Dr. Reyes", date: "2025-05-15", time: "10:00 AM", status: "Confirmed" }
-  ];
-
-  /* ---------- 3. Helpers ---------- */
-  function el(tag, className, text) {
-    const node = document.createElement(tag);
-    if (className) node.className = className;
-    if (text !== undefined) node.textContent = text;
-    return node;
-  }
+  let appointments = [];
 
   function prettyDate(key) {
     const parts = String(key).split("-").map(Number);
@@ -63,7 +56,6 @@ document.addEventListener("DOMContentLoaded", () => {
     return "upcoming";
   }
 
-  /* ---------- 4. Tabs and list ---------- */
   const list = document.getElementById("apptList");
   const tabButtons = document.querySelectorAll(".tab");
   let activeTab = "upcoming";
@@ -97,17 +89,15 @@ document.addEventListener("DOMContentLoaded", () => {
     items.forEach(appt => {
       const card = el("article", "appt-card");
 
-      // Pet
       const pet = el("div", "appt-pet");
       const avatar = el("div", "appt-avatar", "PET");
 
       const name = el("div", "appt-name");
-      name.append(appt.petName, document.createElement("br"), appt.service);
+      name.append(appt.petName || "Pet", document.createElement("br"), appt.service || "Service");
       pet.append(avatar, name);
 
-      // Date, time, vet
       const when = el("div", "appt-when");
-      when.append(prettyDate(appt.date) + " \u2022 " + appt.time, document.createElement("br"), appt.vet);
+      when.append(prettyDate(appt.date) + " \u2022 " + appt.time, document.createElement("br"), appt.vet || "Vet");
 
       if (activeTab !== "upcoming") {
         const badge = el("span", "appt-status " + activeTab,
@@ -127,10 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const canBtn = el("button", "btn-cancel", "Cancel");
         canBtn.type = "button";
         canBtn.addEventListener("click", () => {
-          const ok = confirm(
-            "Cancel " + appt.petName + "'s " + appt.service + " on " +
-            prettyDate(appt.date) + " at " + appt.time + "?"
-          );
+          const ok = confirm("Cancel this appointment?");
           if (ok) {
             appt.status = "Cancelled";
             renderList();
@@ -204,9 +191,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function openReschedule(appt) {
     reschedulingAppt = appt;
-
-    reschedNote.textContent = appt.petName + " \u2022 " + appt.service + " with " + appt.vet;
-    reschedDate.value = appt.date;
+    reschedNote.textContent = (appt.petName || "Pet") + " \u2022 " + (appt.service || "Service");
+    reschedDate.value = appt.date || "";
     reschedTime.value = SLOTS.includes(appt.time) ? appt.time : SLOTS[0];
     reschedError.textContent = "";
     reschedDate.classList.remove("input-error");
@@ -249,13 +235,15 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    if (reschedDate.value === reschedulingAppt.date && reschedTime.value === reschedulingAppt.time) {
+    if (reschedulingAppt && reschedDate.value === reschedulingAppt.date && reschedTime.value === reschedulingAppt.time) {
       reschedError.textContent = "Please choose a different date or time.";
       return;
     }
 
-    reschedulingAppt.date = reschedDate.value;
-    reschedulingAppt.time = reschedTime.value;
+    if (reschedulingAppt) {
+      reschedulingAppt.date = reschedDate.value;
+      reschedulingAppt.time = reschedTime.value;
+    }
 
     closeReschedule();
     renderList();

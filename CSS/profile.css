@@ -8,7 +8,6 @@
   --p-ok: #1a7f4b;
 }
 
-/* DITO ANG FIX: Limitado ang lapad at naka-gitna */
 .p-layout {
   display: grid;
   grid-template-columns: 280px minmax(0, 1fr);
@@ -197,6 +196,8 @@
   background: #fff; 
   color: var(--p-blue); 
   border: 1px solid var(--p-blue); 
+  width: fit-content;
+  align-self: center;
 }
 
 .btn-outline:hover { 
@@ -212,7 +213,7 @@
 @media (max-width: 980px) {
   .p-layout { 
     grid-template-columns: 1fr; 
-    max-width: 100%; /* Babalik sa 100% kapag tablet/mobile */
+    max-width: 100%; 
   }
 }
 
